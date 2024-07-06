@@ -1295,21 +1295,29 @@ void guiWindow::on_comPortSelector_currentIndexChanged(int index)
             ui->tabWidget->setEnabled(true);
             ui->customPinsEnabled->setChecked(boolSettings[customPins]);
 
+            if(inputsMap[rumblePin-1] >= 0) { ui->rumbleToggle->setEnabled(true), ui->rumbleFFToggle->setEnabled(true); } else { ui->rumbleToggle->setEnabled(false), ui->rumbleFFToggle->setEnabled(false); }
             ui->rumbleToggle->setChecked(boolSettings[rumble]);
+
+            if(inputsMap[solenoidPin-1] >= 0) { ui->solenoidToggle->setEnabled(true); } else { ui->solenoidToggle->setEnabled(false); }
             ui->solenoidToggle->setChecked(boolSettings[solenoid]);
+
+            if((boolSettings[rumble] && boolSettings[rumbleFF]) || boolSettings[solenoid]) { ui->autofireToggle->setEnabled(true); } else { ui->autofireToggle->setEnabled(false); }
             ui->autofireToggle->setChecked(boolSettings[autofire]);
+
             ui->simplePauseToggle->setChecked(boolSettings[simplePause]);
             ui->holdToPauseToggle->setChecked(boolSettings[holdToPause]);
+
+            if(inputsMap[ledR-1] >= 0 && inputsMap[ledG-1] >= 0 && inputsMap[ledB-1] >= 0) { ui->commonAnodeToggle->setEnabled(true); } else { ui->commonAnodeToggle->setEnabled(false); }
             ui->commonAnodeToggle->setChecked(boolSettings[commonAnode]);
             ui->lowButtonsToggle->setChecked(boolSettings[lowButtonsMode]);
             ui->rumbleFFToggle->setChecked(boolSettings[rumbleFF]);
-            ui->rumbleIntensityBox->setValue(settingsTable[rumbleStrength]);
-            ui->rumbleLengthBox->setValue(settingsTable[rumbleInterval]);
-            ui->holdToPauseLengthBox->setValue(settingsTable[holdToPauseLength]);
-            ui->solenoidNormalIntervalBox->setValue(settingsTable[solenoidNormalInterval]);
-            ui->solenoidFastIntervalBox->setValue(settingsTable[solenoidFastInterval]);
-            ui->solenoidHoldLengthBox->setValue(settingsTable[solenoidHoldLength]);
-            ui->autofireWaitFactorBox->setValue(settingsTable[autofireWaitFactor]);
+            ui->rumbleIntensityBox->setEnabled(boolSettings[rumble]),          ui->rumbleIntensityBox->setValue(settingsTable[rumbleStrength]);
+            ui->rumbleLengthBox->setEnabled(boolSettings[rumble]),             ui->rumbleLengthBox->setValue(settingsTable[rumbleInterval]);
+            ui->holdToPauseLengthBox->setEnabled(boolSettings[holdToPause]),   ui->holdToPauseLengthBox->setValue(settingsTable[holdToPauseLength]);
+            ui->solenoidNormalIntervalBox->setEnabled(boolSettings[solenoid]), ui->solenoidNormalIntervalBox->setValue(settingsTable[solenoidNormalInterval]);
+            ui->solenoidFastIntervalBox->setEnabled(boolSettings[solenoid]),   ui->solenoidFastIntervalBox->setValue(settingsTable[solenoidFastInterval]);
+            ui->solenoidHoldLengthBox->setEnabled(boolSettings[solenoid]),     ui->solenoidHoldLengthBox->setValue(settingsTable[solenoidHoldLength]);
+            ui->autofireWaitFactorBox->setEnabled(boolSettings[autofire]),     ui->autofireWaitFactorBox->setValue(settingsTable[autofireWaitFactor]);
             ui->productIdInput->setText(tinyUSBtable.tinyUSBid);
             ui->productNameInput->setText(tinyUSBtable.tinyUSBname);
             if(inputsMap[neoPixel-1] >= 0) { ui->neopixelGroupBox->setEnabled(true); } else { ui->neopixelGroupBox->setEnabled(false); }
@@ -1509,7 +1517,13 @@ void guiWindow::pinBoxes_activated(int index)
     // because "->currentIndex" is already updated, we just update it at the end of activations
     // to check that we aren't re-selecting the index for that box.
     pinBoxesOldIndex[pin] = index;
+
+    // update settings panel to reflect pins map changes
+    if(inputsMap[rumblePin-1] >= 0) { ui->rumbleToggle->setEnabled(true), ui->rumbleFFToggle->setEnabled(true); } else { ui->rumbleToggle->setChecked(false), ui->rumbleToggle->setEnabled(false), ui->rumbleFFToggle->setChecked(false), ui->rumbleFFToggle->setEnabled(false); }
+    if(inputsMap[solenoidPin-1] >= 0) { ui->solenoidToggle->setEnabled(true); } else { ui->solenoidToggle->setChecked(false), ui->solenoidToggle->setEnabled(false); }
     if(inputsMap[neoPixel-1] >= 0) { ui->neopixelGroupBox->setEnabled(true); } else { ui->neopixelGroupBox->setEnabled(false); }
+    if(inputsMap[ledR-1] >= 0 && inputsMap[ledG-1] >= 0 && inputsMap[ledB-1] >= 0) { ui->commonAnodeToggle->setEnabled(true); } else { ui->commonAnodeToggle->setEnabled(false); }
+
     DiffUpdate();
 }
 
@@ -1625,6 +1639,21 @@ void guiWindow::on_customPinsEnabled_stateChanged(int arg1)
 {
     boolSettings[customPins] = arg1;
     BoxesUpdate();
+    if(inputsMap[solenoidPin-1] >= 0) {
+        ui->solenoidToggle->setEnabled(true);
+    } else {
+        ui->solenoidToggle->setEnabled(false);
+        ui->solenoidToggle->setChecked(false);
+    }
+    if(inputsMap[rumblePin-1] >= 0) {
+        ui->rumbleToggle->setEnabled(true);
+        ui->rumbleFFToggle->setEnabled(true);
+    } else {
+        ui->rumbleToggle->setEnabled(false);
+        ui->rumbleToggle->setChecked(false);
+        ui->rumbleFFToggle->setEnabled(false);
+        ui->rumbleFFToggle->setChecked(false);
+    }
     DiffUpdate();
 }
 
@@ -1673,8 +1702,14 @@ void guiWindow::on_rumbleToggle_stateChanged(int arg1)
     if(!arg1) {
         ui->rumbleFFToggle->setChecked(false);
         ui->rumbleFFToggle->setEnabled(false);
+        ui->rumbleIntensityBox->setEnabled(false);
+        ui->rumbleLengthBox->setEnabled(false);
+        ui->rumbleTestBtn->setEnabled(false);
     } else {
         ui->rumbleFFToggle->setEnabled(true);
+        ui->rumbleIntensityBox->setEnabled(true);
+        ui->rumbleLengthBox->setEnabled(true);
+        ui->rumbleTestBtn->setEnabled(true);
     }
     if(!(arg1 && boolSettings[rumbleFF]) && !boolSettings[solenoid]) {
         ui->autofireToggle->setChecked(false);
@@ -1689,7 +1724,18 @@ void guiWindow::on_rumbleToggle_stateChanged(int arg1)
 void guiWindow::on_solenoidToggle_stateChanged(int arg1)
 {
     boolSettings[solenoid] = arg1;
-    if(arg1) { ui->rumbleFFToggle->setChecked(false); }
+    if(arg1) {
+        ui->rumbleFFToggle->setChecked(false);
+        ui->solenoidNormalIntervalBox->setEnabled(true);
+        ui->solenoidFastIntervalBox->setEnabled(true);
+        ui->solenoidHoldLengthBox->setEnabled(true);
+        ui->solenoidTestBtn->setEnabled(true);
+    } else {
+        ui->solenoidNormalIntervalBox->setEnabled(false);
+        ui->solenoidFastIntervalBox->setEnabled(false);
+        ui->solenoidHoldLengthBox->setEnabled(false);
+        ui->solenoidTestBtn->setEnabled(false);
+    }
     if(!arg1 && !(boolSettings[rumble] && boolSettings[rumbleFF])) {
         ui->autofireToggle->setChecked(false);
         ui->autofireToggle->setEnabled(false);
@@ -1703,6 +1749,7 @@ void guiWindow::on_solenoidToggle_stateChanged(int arg1)
 void guiWindow::on_autofireToggle_stateChanged(int arg1)
 {
     boolSettings[autofire] = arg1;
+    if(arg1) { ui->autofireWaitFactorBox->setEnabled(true); } else { ui->autofireWaitFactorBox->setEnabled(false); }
     DiffUpdate();
 }
 
@@ -1717,6 +1764,8 @@ void guiWindow::on_simplePauseToggle_stateChanged(int arg1)
 void guiWindow::on_holdToPauseToggle_stateChanged(int arg1)
 {
     boolSettings[holdToPause] = arg1;
+    if(arg1) { ui->holdToPauseLengthBox->setEnabled(true); }
+    else { ui->holdToPauseLengthBox->setEnabled(false); }
     DiffUpdate();
 }
 
