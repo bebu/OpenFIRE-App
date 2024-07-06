@@ -1674,6 +1674,12 @@ void guiWindow::on_rumbleToggle_stateChanged(int arg1)
     } else {
         ui->rumbleFFToggle->setEnabled(true);
     }
+    if(!(arg1 && boolSettings[rumbleFF]) && !boolSettings[solenoid]) {
+        ui->autofireToggle->setChecked(false);
+        ui->autofireToggle->setEnabled(false);
+    } else {
+        ui->autofireToggle->setEnabled(true);
+    }
     DiffUpdate();
 }
 
@@ -1682,6 +1688,12 @@ void guiWindow::on_solenoidToggle_stateChanged(int arg1)
 {
     boolSettings[solenoid] = arg1;
     if(arg1) { ui->rumbleFFToggle->setChecked(false); }
+    if(!arg1 && !(boolSettings[rumble] && boolSettings[rumbleFF])) {
+        ui->autofireToggle->setChecked(false);
+        ui->autofireToggle->setEnabled(false);
+    } else {
+        ui->autofireToggle->setEnabled(true);
+    }
     DiffUpdate();
 }
 
@@ -1725,6 +1737,12 @@ void guiWindow::on_rumbleFFToggle_stateChanged(int arg1)
 {
     boolSettings[rumbleFF] = arg1;
     if(arg1) { ui->solenoidToggle->setChecked(false); }
+    if(!(arg1 && boolSettings[rumble]) && !boolSettings[solenoid]) {
+        ui->autofireToggle->setChecked(false);
+        ui->autofireToggle->setEnabled(false);
+    } else {
+        ui->autofireToggle->setEnabled(true);
+    }
     DiffUpdate();
 }
 
@@ -1784,13 +1802,13 @@ void guiWindow::on_productIdInput_textChanged(const QString &arg1)
     QString hex;
 
     if(iTest >= INT8_MIN && iTest <= INT8_MAX){
-            hex = QString("%1").arg(iTest & 0xFF, 2, 16);
+            hex = QString("%1").arg(iTest & 0xFF, 2, 16).simplified();
     } else if(iTest >= INT16_MIN && iTest <= INT16_MAX){
-            hex = QString("%1").arg(iTest & 0xFFFF, 4, 16);
+            hex = QString("%1").arg(iTest & 0xFFFF, 4, 16).simplified();
     } else {
-            hex = QString("%1").arg(iTest, 8, 16);
+            hex = QString("%1").arg(iTest, 8, 16).simplified();
     }
-    ui->productIdConverted->setText(hex);
+    ui->productIdConverted->setText(QString("0x%1").arg(hex));
 }
 
 
