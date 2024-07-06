@@ -33,6 +33,8 @@
 #include <QColorDialog>
 #include <QInputDialog>
 #include <QTimer>
+#include <QDesktopServices>
+#include <QUrl>
 
 // Currently loaded board object
 boardInfo_s board;
@@ -2331,3 +2333,15 @@ void guiWindow::on_actionAbout_UI_triggered()
     about->setWindowFlags(Qt::MSWindowsFixedSizeDialogHint | Qt::WindowCloseButtonHint);
     about->show();
 }
+
+void guiWindow::on_actionOpenFIRE_Documentation_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/TeamOpenFIRE/OpenFIRE-Firmware/blob/OpenFIRE-dev/SamcoEnhanced/README.md"));
+}
+
+
+void guiWindow::on_actionOpenFIRE_Serial_Usage_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/TeamOpenFIRE/OpenFIRE-Firmware/wiki"));
+}
+

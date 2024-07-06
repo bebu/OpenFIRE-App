@@ -152,6 +152,10 @@ private slots:
 
     void on_blueLedTestBtn_clicked();
 
+    void on_actionOpenFIRE_Documentation_triggered();
+
+    void on_actionOpenFIRE_Serial_Usage_triggered();
+
 private:
     Ui::guiWindow *ui;
 

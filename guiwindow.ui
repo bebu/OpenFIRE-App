@@ -1540,6 +1540,14 @@
     </property>
     <addaction name="actionAbout_UI"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionOpenFIRE_Documentation"/>
+    <addaction name="actionOpenFIRE_Serial_Usage"/>
+   </widget>
+   <addaction name="menuHelp"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
@@ -1550,6 +1558,22 @@
   <action name="actionAbout_UI">
    <property name="text">
     <string>About OpenFIRE...</string>
+   </property>
+  </action>
+  <action name="actionOpenFIRE_Documentation">
+   <property name="text">
+    <string>OpenFIRE Documentation...</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+D</string>
+   </property>
+  </action>
+  <action name="actionOpenFIRE_Serial_Usage">
+   <property name="text">
+    <string>OpenFIRE Serial Usage Docs...</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
  </widget>
