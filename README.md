@@ -27,7 +27,7 @@ Boards flashed with OpenFIRE *must be plugged in **before** launching the applic
 ## Building:
 ### For Linux:
 #### Arch: requires `qt-base` `qt-serialport` `qt-svg`
-#### Debian: requires `qttools5-dev` `libqt5serialport-dev` `libqt5svg-dev` (for Qt5)
+#### Debian: requires `build-essential` `cmake` `qttools5-dev` `libqt5serialport-dev` `libqt5svg-dev` (for Qt5)
  - Clone the repo:
    ```
    git clone https://github.com/TeamOpenFIRE/OpenFIRE-App
