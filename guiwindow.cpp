@@ -2088,7 +2088,7 @@ void guiWindow::on_calib1Btn_clicked()
 {
     serialPort.write("XC1C");
     if(serialPort.waitForBytesWritten(1000)) {
-        PopupWindow("Calibrating Profile 1.", "Aim the gun at the cursor and pull the trigger to set center.\nAdjust the X & Y scales with Buttons A & B, and pull the trigger to confirm.\n\nOnce the scales are set, you'll be able to test the new settings. Press the trigger button once more to confirm.", "Calibration", 2);
+        PopupWindow("Calibrating Profile 1.", "Aim the gun at the cursor in the center of the display and pull the trigger, then shoot at the four edges of the display that the mouse moves to.\nYou can exit without saving changes by pressing either Button A/B/C.\n\nAfter the final center target, verify that the new calibration is to your liking; press the trigger to confirm, Button A/B to restart calibration, or Button C to exit calibration without any changes.", "Calibration", 2);
     }
 }
 
@@ -2097,7 +2097,7 @@ void guiWindow::on_calib2Btn_clicked()
 {
     serialPort.write("XC2C");
     if(serialPort.waitForBytesWritten(1000)) {
-        PopupWindow("Calibrating Profile 2.", "Aim the gun at the cursor and pull the trigger to set center.\nAdjust the X & Y scales with Buttons A & B, and pull the trigger to confirm.\n\nOnce the scales are set, you'll be able to test the new settings. Press the trigger button once more to confirm.", "Calibration", 2);
+        PopupWindow("Calibrating Profile 2.", "Aim the gun at the cursor in the center of the display and pull the trigger, then shoot at the four edges of the display that the mouse moves to.\nYou can exit without saving changes by pressing either Button A/B/C.\n\nAfter the final center target, verify that the new calibration is to your liking; press the trigger to confirm, Button A/B to restart calibration, or Button C to exit calibration without any changes.", "Calibration", 2);
     }
 }
 
@@ -2106,7 +2106,7 @@ void guiWindow::on_calib3Btn_clicked()
 {
     serialPort.write("XC3C");
     if(serialPort.waitForBytesWritten(1000)) {
-        PopupWindow("Calibrating Profile 3.", "Aim the gun at the cursor and pull the trigger to set center.\nAdjust the X & Y scales with Buttons A & B, and pull the trigger to confirm.\n\nOnce the scales are set, you'll be able to test the new settings. Press the trigger button once more to confirm.", "Calibration", 2);
+        PopupWindow("Calibrating Profile 3.", "Aim the gun at the cursor in the center of the display and pull the trigger, then shoot at the four edges of the display that the mouse moves to.\nYou can exit without saving changes by pressing either Button A/B/C.\n\nAfter the final center target, verify that the new calibration is to your liking; press the trigger to confirm, Button A/B to restart calibration, or Button C to exit calibration without any changes.", "Calibration", 2);
     }
 }
 
@@ -2115,7 +2115,7 @@ void guiWindow::on_calib4Btn_clicked()
 {
     serialPort.write("XC4C");
     if(serialPort.waitForBytesWritten(1000)) {
-        PopupWindow("Calibrating Profile 4.", "Aim the gun at the cursor and pull the trigger to set center.\nAdjust the X & Y scales with Buttons A & B, and pull the trigger to confirm.\n\nOnce the scales are set, you'll be able to test the new settings. Press the trigger button once more to confirm.", "Calibration", 2);
+        PopupWindow("Calibrating Profile 4.", "Aim the gun at the cursor in the center of the display and pull the trigger, then shoot at the four edges of the display that the mouse moves to.\nYou can exit without saving changes by pressing either Button A/B/C.\n\nAfter the final center target, verify that the new calibration is to your liking; press the trigger to confirm, Button A/B to restart calibration, or Button C to exit calibration without any changes.", "Calibration", 2);
     }
 }
 
