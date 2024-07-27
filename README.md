@@ -1,4 +1,4 @@
-#### Like our work? [Remember to support the maintainers!](https://github.com/TeamOpenFIRE/.github/blob/main/profile/README.md)
+#### Like our work? [Remember to support the developers!](https://github.com/TeamOpenFIRE/.github/blob/main/profile/README.md)
 
 ![screenies](OFA-screenies.png)
 # OpenFIRE App
