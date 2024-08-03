@@ -172,7 +172,7 @@ const int8_t adafruitItsyBitsyRP2040Presets[2][boardInputsCount-1] = {
 
 typedef struct boardInfo_t {
     uint8_t type = nothing;
-    float versionNumber = 0.0;
+    QString versionNumber;
     QString versionCodename;
     uint8_t selectedProfile;
     uint8_t previousProfile;

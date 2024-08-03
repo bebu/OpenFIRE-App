@@ -444,7 +444,7 @@ bool guiWindow::SerialInit(int portNum)
                 QStringList buffer = bufStr.split(',');
                 if(buffer[0].contains("OpenFIRE")) {
                     qDebug() << "OpenFIRE gun detected!";
-                    board.versionNumber = buffer[1].toFloat();
+                    board.versionNumber = buffer[1];
                     qDebug() << "Version number:" << board.versionNumber;
                     board.versionCodename = buffer[2];
                     qDebug() << "Version codename:" << board.versionCodename;
@@ -919,7 +919,7 @@ void guiWindow::on_comPortSelector_currentIndexChanged(int index)
         // else, serial port is online! What do we got?
         } else {
             aliveTimer->start(ALIVE_TIMER);
-            ui->versionLabel->setText(QString("v%1 - \"%2\"").arg(board.versionNumber).arg(board.versionCodename));
+            ui->versionLabel->setText(QString("v%1 - \"%2\"").arg(board.versionNumber, board.versionCodename));
             BoxesFill();
             LabelsUpdate();
 
@@ -2126,13 +2126,13 @@ void guiWindow::serialPort_readyRead()
         while(!serialPort.atEnd()) {
             QString idleBuffer = serialPort.readLine();
             if(idleBuffer.contains("Pressed:")) {
-                uint8_t button = idleBuffer.trimmed().right(2).toInt();
+                uint8_t button = idleBuffer.trimmed().rightRef(2).toInt();
                 testLabel[button-1]->setText(QString("<font color=#FF0000>%1</font>").arg(valuesNameList[button]));
             } else if(idleBuffer.contains("Released:")) {
-                uint8_t button = idleBuffer.trimmed().right(2).toInt();
+                uint8_t button = idleBuffer.trimmed().rightRef(2).toInt();
                 testLabel[button-1]->setText(valuesNameList[button]);
             } else if(idleBuffer.contains("Temperature:")) {
-                uint8_t temp = idleBuffer.trimmed().right(2).toInt();
+                uint8_t temp = idleBuffer.trimmed().rightRef(2).toInt();
                 if(temp > tempShutoff) {
                     testLabel[14]->setText(QString("<font color=#FF0000>Temp: %1°C</font>").arg(temp));
                 } else if(temp > tempWarning) {
@@ -2141,7 +2141,7 @@ void guiWindow::serialPort_readyRead()
                     testLabel[14]->setText(QString("<font color=#11D00A>Temp: %1°C</font>").arg(temp));
                 }
             } else if(idleBuffer.contains("Analog:")) {
-                uint8_t analogDir = idleBuffer.trimmed().right(1).toInt();
+                uint8_t analogDir = idleBuffer.trimmed().rightRef(1).toInt();
                 if(analogDir) {
                     switch(analogDir) {
                     case 1: testLabel[15]->setText("<font color=#FF0000>Analog 🡹</font>"); break;
@@ -2158,14 +2158,14 @@ void guiWindow::serialPort_readyRead()
                 }
                 // no idea here lol
             } else if(idleBuffer.contains("Profile: ")) {
-                uint8_t selection = idleBuffer.trimmed().right(1).toInt();
+                uint8_t selection = idleBuffer.trimmed().rightRef(1).toInt();
                 if(selection != board.selectedProfile) {
                     board.selectedProfile = selection;
                     selectedProfile[selection]->setChecked(true);
                 }
                 DiffUpdate();
             } else if(idleBuffer.contains("UpdatedProf: ")) {
-                uint8_t selection = idleBuffer.trimmed().right(1).toInt();
+                uint8_t selection = idleBuffer.trimmed().rightRef(1).toInt();
                 if(selection != board.selectedProfile) {
                     selectedProfile[selection]->setChecked(true);
                 }
