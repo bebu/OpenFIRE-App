@@ -263,6 +263,8 @@ private:
 
     void DiffUpdate();
 
+    void PixelsDiff();
+
     void PopupWindow(QString errorTitle, QString errorMessage, QString windowTitle, int errorType);
 
     void PortsSearch();

@@ -724,6 +724,20 @@ QString PrettifyName()
 }
 
 
+void guiWindow::PixelsDiff()
+{
+    if(settingsTable[customLEDcount] == settingsTable_orig[customLEDcount] &&
+        settingsTable[customLEDstatic] == settingsTable_orig[customLEDstatic] &&
+        settingsTable[customLEDcolor1] == settingsTable_orig[customLEDcolor1] &&
+        settingsTable[customLEDcolor2] == settingsTable_orig[customLEDcolor2] &&
+        settingsTable[customLEDcolor3] == settingsTable_orig[customLEDcolor3]) {
+        ui->pixelChangeNotice->setVisible(false);
+    } else {
+        ui->pixelChangeNotice->setVisible(true);
+    }
+}
+
+
 void guiWindow::on_confirmButton_clicked()
 {
     QMessageBox messageBox;
@@ -817,6 +831,7 @@ void guiWindow::on_confirmButton_clicked()
             } else {
                 statusBar()->showMessage("Sent settings successfully!", 5000);
                 SyncSettings();
+                PixelsDiff();
                 DiffUpdate();
                 ui->boardLabel->setText(PrettifyName());
             }
@@ -1991,6 +2006,10 @@ void guiWindow::on_neopixelStrandLengthBox_valueChanged(int arg1)
     if(arg1 < settingsTable[customLEDstatic]) {
         ui->customLEDstaticSpinbox->setValue(arg1);
     }
+
+    // show NeoPixel notice if values are updated
+    PixelsDiff();
+
     DiffUpdate();
 }
 
@@ -2023,6 +2042,10 @@ void guiWindow::on_customLEDstaticSpinbox_valueChanged(int arg1)
             break;
         }
     }
+
+    // show NeoPixel notice if values are updated
+    PixelsDiff();
+
     DiffUpdate();
 }
 
@@ -2041,6 +2064,10 @@ void guiWindow::on_customLEDstaticBtn1_clicked()
         packedColor |= *blue;
         settingsTable[customLEDcolor1] = packedColor;
         ui->customLEDstaticBtn1->setStyleSheet(QString("background-color: #%1").arg(packedColor, 6, 16, QLatin1Char('0')));
+
+        // show NeoPixel notice if values are updated
+        PixelsDiff();
+
         DiffUpdate();
     }
 }
@@ -2060,6 +2087,10 @@ void guiWindow::on_customLEDstaticBtn2_clicked()
         packedColor |= *blue;
         settingsTable[customLEDcolor2] = packedColor;
         ui->customLEDstaticBtn2->setStyleSheet(QString("background-color: #%1").arg(packedColor, 6, 16, QLatin1Char('0')));
+
+        // show NeoPixel notice if values are updated
+        PixelsDiff();
+
         DiffUpdate();
     }
 }
@@ -2079,6 +2110,10 @@ void guiWindow::on_customLEDstaticBtn3_clicked()
         packedColor |= *blue;
         settingsTable[customLEDcolor3] = packedColor;
         ui->customLEDstaticBtn3->setStyleSheet(QString("background-color: #%1").arg(packedColor, 6, 16, QLatin1Char('0')));
+
+        // show NeoPixel notice if values are updated
+        PixelsDiff();
+
         DiffUpdate();
     }
 }

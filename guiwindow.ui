@@ -808,6 +808,24 @@
              </item>
             </layout>
            </item>
+           <item>
+            <widget class="QLabel" name="pixelChangeNotice">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="font">
+              <font>
+               <italic>true</italic>
+              </font>
+             </property>
+             <property name="text">
+              <string>Changes to NeoPixel settings may require a power cycle to update properly!</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -1542,7 +1560,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionOpenFIRE_Documentation"/>
     <addaction name="actionOpenFIRE_Serial_Usage"/>
@@ -1557,12 +1575,12 @@
   </widget>
   <action name="actionAbout_UI">
    <property name="text">
-    <string>About OpenFIRE...</string>
+    <string>&amp;About OpenFIRE...</string>
    </property>
   </action>
   <action name="actionOpenFIRE_Documentation">
    <property name="text">
-    <string>OpenFIRE Documentation...</string>
+    <string>&amp;OpenFIRE Documentation...</string>
    </property>
    <property name="shortcut">
     <string>Alt+D</string>
@@ -1570,7 +1588,7 @@
   </action>
   <action name="actionOpenFIRE_Serial_Usage">
    <property name="text">
-    <string>OpenFIRE Serial Usage Docs...</string>
+    <string>OpenFIRE &amp;Serial Usage Docs...</string>
    </property>
    <property name="shortcut">
     <string>Alt+S</string>
