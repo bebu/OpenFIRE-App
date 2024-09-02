@@ -217,7 +217,7 @@ const boardLayout_t rpipicoLayout[] = {
     {btnUnmapped, pinDigital}, {btnReserved, pinNothing}, // 23, 24, 25
     {btnReserved, pinNothing}, {btnReserved, pinNothing}, // are unused/unexposed
     {btnUnmapped, pinAnalog},  {btnUnmapped, pinAnalog},  // ADC pins
-    {btnUnmapped, pinAnalog},  {-2, pinNothing}           // ADC, padding
+    {tempPin, pinAnalog},      {-2, pinNothing}           // ADC, padding
 };
 
 const boardLayout_t adafruitItsyRP2040Layout[] = {
@@ -277,7 +277,7 @@ const boardLayout_t arduinoNanoRP2040Layout[] = {
     {btnReserved, pinNothing}, {btnReserved, pinNothing},
     {btnReserved, pinNothing}, {btnUnmapped, pinDigital},
     {btnUnmapped, pinAnalog},  {btnUnmapped, pinAnalog},
-    {btnUnmapped, pinAnalog},  {btnUnmapped, pinAnalog}
+    {tempPin, pinAnalog},      {btnUnmapped, pinAnalog}
 };
 
 const boardLayout_t waveshareZeroLayout[] = {
