@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>950</height>
+    <width>650</width>
+    <height>992</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>OpenFIRE App - Aino</string>
+   <string>OpenFIRE App - Tsuzura [v2.2]</string>
   </property>
   <property name="windowIcon">
    <iconset resource="vectors.qrc">
@@ -1548,8 +1548,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
-     <height>19</height>
+     <width>650</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuAbout">
