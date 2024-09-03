@@ -1510,17 +1510,85 @@ void guiWindow::pinBoxes_activated(int index)
         ui->presetsBox->setCurrentIndex(-1);
     }
 
+    // if it's being set to 0 (unmapped), unmap this pin without question.
     if(!index) {
         inputsMap[currentPins.value(pin) - 1] = -1;
         currentPins[pin] = btnUnmapped;
+    // else, it's a function, so check for duplicates
     } else if(pinBoxesOldIndex[pin] != index) {
         int8_t btnRequest = index - 1;
 
-        // Scorched Earth approach, clear anything that matches to unmapped.
+        // Scorched Earth approach, clear anything that matches so that it's unmapped.
         inputsMap[btnRequest] = -1;
         // only reset if current pin was already mapped.
         if(currentPins.value(pin) > 0) {
             inputsMap[currentPins.value(pin) - 1] = -1;
+        }
+        // if function is I2C, check for other things
+        if(index == camSDA) {
+            // if it's mapped, check that cam clock pin isn't mapped to the opposite I2C channel
+            if(inputsMap[camSCL-1] > -1 && (pin & 0b00000010) != (inputsMap[camSCL-1] & 0b00000010)) {
+                // channels mismatched, unmap the other pin
+                currentPins[inputsMap[camSCL-1]] = btnUnmapped;
+                pinBoxes[inputsMap[camSCL-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[camSCL-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Camera pins are not on the same I2C channel! Please check camera pin mappings.", 10000);
+            // check that peripheral data isn't mapped to this I2C channel
+            } else if(inputsMap[periphSDA-1] > -1 && (pin & 0b00000010) == (inputsMap[periphSDA-1] & 0b00000010)) {
+                // channels matched, unmap peripheral data
+                currentPins[inputsMap[periphSDA-1]] = btnUnmapped;
+                pinBoxes[inputsMap[periphSDA-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[periphSDA-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Camera and Peripheral Data pins clashed! Please remap Peripheral Data.", 10000);
+            }
+        } else if(index == camSCL) {
+            // if it's mapped, check that current cam clock pin isn't mapped to the opposite I2C channel
+            if(inputsMap[camSDA-1] > -1 && (pin & 0b00000010) != (inputsMap[camSDA-1] & 0b00000010)) {
+                // channels mismatched, unmap the other pin
+                currentPins[inputsMap[camSDA-1]] = btnUnmapped;
+                pinBoxes[inputsMap[camSDA-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[camSDA-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Camera pins are not on the same I2C channel! Please check camera pin mappings.", 10000);
+            // check that peripheral clock isn't mapped to this I2C channel
+            } else if(inputsMap[periphSCL-1] > -1 && (pin & 0b00000010) == (inputsMap[periphSCL-1] & 0b00000010)) {
+                // channels matched, unmap peripheral clock
+                currentPins[inputsMap[periphSCL-1]] = btnUnmapped;
+                pinBoxes[inputsMap[periphSCL-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[periphSCL-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Camera and Peripheral Clock pins clashed! Please remap Peripheral Clock.", 10000);
+            }
+        } else if(index == periphSDA) {
+            // if it's mapped, check that current peripheral clock pin isn't mapped to the opposite I2C channel
+            if(inputsMap[periphSCL-1] > -1 && (pin & 0b00000010) != (inputsMap[periphSCL-1] & 0b00000010)) {
+                // channels mismatched, unmap the other pin
+                currentPins[inputsMap[periphSCL-1]] = btnUnmapped;
+                pinBoxes[inputsMap[periphSCL-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[periphSCL-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Peripheral pins are not on the same I2C channel! Please check peripheral pin mappings.", 10000);
+            // check that cam data isn't mapped to this I2C channel
+            } else if(inputsMap[camSDA-1] > -1 && (pin & 0b00000010) == (inputsMap[camSDA-1] & 0b00000010)) {
+                // channels matched, unmap cam data
+                currentPins[inputsMap[camSDA-1]] = btnUnmapped;
+                pinBoxes[inputsMap[camSDA-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[camSDA-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Camera and Peripheral Data pins clashed! Please remap Camera Data.", 10000);
+            }
+        } else if(index == periphSCL) {
+            // if it's mapped, check that current peripheral data pin isn't mapped to the opposite I2C channel
+            if(inputsMap[periphSDA-1] > -1 && (pin & 0b00000010) != (inputsMap[periphSDA-1] & 0b00000010)) {
+                // channels mismatched, unmap the other pin
+                currentPins[inputsMap[periphSDA-1]] = btnUnmapped;
+                pinBoxes[inputsMap[periphSDA-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[periphSDA-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Peripheral pins are not on the same I2C channel! Please check peripheral pin mappings.", 10000);
+            // check that cam clock isn't mapped to this I2C channel
+            } else if(inputsMap[camSCL-1] > -1 && (pin & 0b00000010) == (inputsMap[camSCL-1] & 0b00000010)) {
+                // channels matched, unmap cam clock
+                currentPins[inputsMap[camSCL-1]] = btnUnmapped;
+                pinBoxes[inputsMap[camSCL-1]]->setCurrentIndex(btnUnmapped);
+                pinBoxesOldIndex[inputsMap[camSCL-1]] = btnUnmapped;
+                ui->statusBar->showMessage("Camera and Peripheral Data pins clashed! Please remap Camera Clock.", 10000);
+            }
         }
         QList<uint8_t> foundList = currentPins.keys(index);
         for(uint8_t i = 0; i < foundList.length(); i++) {
