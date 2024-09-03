@@ -897,9 +897,12 @@ void guiWindow::on_comPortSelector_currentIndexChanged(int index)
         connect(pinBoxes[i], SIGNAL(activated(int)), this, SLOT(pinBoxes_activated(int)));
         padding[i] = new QWidget();
         padding[i]->setMinimumHeight(25);
-        pinLabel[i] = new QLabel(QString("<GPIO%1>").arg(i));
+        // I2C channel coloring
+        if(i & 0b0000010) { pinLabel[i] = new QLabel(QString("<font color=#FF8800>«GPIO%1»</font>").arg(i)); }
+        else { pinLabel[i] = new QLabel(QString("<font color=#0099FF>«GPIO%1»</font>").arg(i)); }
         pinLabel[i]->setEnabled(false);
         pinLabel[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        pinLabel[i]->setToolTip(QString("GPIO Pin number %1\n\nBlue pin numbers are members of I2C0\nOrange are members of I2C1").arg(i));
     }
 
     if(index > 0) {
