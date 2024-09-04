@@ -50,11 +50,6 @@ QVector<profilesTable_s> profilesTable(PROFILES_COUNT);
 // Calibration profiles, as loaded from the board
 QVector<profilesTable_s> profilesTable_orig(PROFILES_COUNT);
 
-// Indexed array map of the current physical layout of the board.
-// Key = pin number, Value = pin function
-// Values: -2 = N/A, -1 = reserved, 0 = available, unused
-QMap<uint8_t, int8_t> currentPins;
-
 // Map of what inputs are put where,
 // Key = button/output, Value = pin number occupying, if any.
 // Value of -1 means unmapped.
@@ -534,7 +529,6 @@ void guiWindow::BoxesUpdate()
             if(inputsMap.value(i) >= 0) {
                 currentPins[inputsMap.value(i)] = i+1;
                 pinBoxes[inputsMap.value(i)]->setCurrentIndex(currentPins[inputsMap.value(i)]);
-                pinBoxesOldIndex[inputsMap.value(i)] = currentPins[inputsMap.value(i)];
             }
         }
         return;
@@ -571,7 +565,6 @@ void guiWindow::BoxesUpdate()
 
         for(uint8_t i = 0; i < 30; i++) {
             pinBoxes[i]->setCurrentIndex(currentPins[i]);
-            pinBoxesOldIndex[i] = currentPins[i];
             pinBoxes[i]->setEnabled(false);
         }
         for(uint8_t i = 0; i < 30; i++) {
@@ -1515,7 +1508,7 @@ void guiWindow::pinBoxes_activated(int index)
         inputsMap[currentPins.value(pin) - 1] = -1;
         currentPins[pin] = btnUnmapped;
     // else, it's a function, so check for duplicates
-    } else if(pinBoxesOldIndex[pin] != index) {
+    } else if(currentPins[pin] != index) {
         int8_t btnRequest = index - 1;
 
         // Scorched Earth approach, clear anything that matches so that it's unmapped.
@@ -1531,14 +1524,12 @@ void guiWindow::pinBoxes_activated(int index)
                 // channels mismatched, unmap the other pin
                 currentPins[inputsMap[camSCL-1]] = btnUnmapped;
                 pinBoxes[inputsMap[camSCL-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[camSCL-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Camera pins are not on the same I2C channel! Please check camera pin mappings.", 10000);
             // check that peripheral data isn't mapped to this I2C channel
             } else if(inputsMap[periphSDA-1] > -1 && (pin & 0b00000010) == (inputsMap[periphSDA-1] & 0b00000010)) {
                 // channels matched, unmap peripheral data
                 currentPins[inputsMap[periphSDA-1]] = btnUnmapped;
                 pinBoxes[inputsMap[periphSDA-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[periphSDA-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Camera and Peripheral Data pins clashed! Please remap Peripheral Data.", 10000);
             }
         } else if(index == camSCL) {
@@ -1547,14 +1538,12 @@ void guiWindow::pinBoxes_activated(int index)
                 // channels mismatched, unmap the other pin
                 currentPins[inputsMap[camSDA-1]] = btnUnmapped;
                 pinBoxes[inputsMap[camSDA-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[camSDA-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Camera pins are not on the same I2C channel! Please check camera pin mappings.", 10000);
             // check that peripheral clock isn't mapped to this I2C channel
             } else if(inputsMap[periphSCL-1] > -1 && (pin & 0b00000010) == (inputsMap[periphSCL-1] & 0b00000010)) {
                 // channels matched, unmap peripheral clock
                 currentPins[inputsMap[periphSCL-1]] = btnUnmapped;
                 pinBoxes[inputsMap[periphSCL-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[periphSCL-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Camera and Peripheral Clock pins clashed! Please remap Peripheral Clock.", 10000);
             }
         } else if(index == periphSDA) {
@@ -1563,14 +1552,12 @@ void guiWindow::pinBoxes_activated(int index)
                 // channels mismatched, unmap the other pin
                 currentPins[inputsMap[periphSCL-1]] = btnUnmapped;
                 pinBoxes[inputsMap[periphSCL-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[periphSCL-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Peripheral pins are not on the same I2C channel! Please check peripheral pin mappings.", 10000);
             // check that cam data isn't mapped to this I2C channel
             } else if(inputsMap[camSDA-1] > -1 && (pin & 0b00000010) == (inputsMap[camSDA-1] & 0b00000010)) {
                 // channels matched, unmap cam data
                 currentPins[inputsMap[camSDA-1]] = btnUnmapped;
                 pinBoxes[inputsMap[camSDA-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[camSDA-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Camera and Peripheral Data pins clashed! Please remap Camera Data.", 10000);
             }
         } else if(index == periphSCL) {
@@ -1579,14 +1566,12 @@ void guiWindow::pinBoxes_activated(int index)
                 // channels mismatched, unmap the other pin
                 currentPins[inputsMap[periphSDA-1]] = btnUnmapped;
                 pinBoxes[inputsMap[periphSDA-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[periphSDA-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Peripheral pins are not on the same I2C channel! Please check peripheral pin mappings.", 10000);
             // check that cam clock isn't mapped to this I2C channel
             } else if(inputsMap[camSCL-1] > -1 && (pin & 0b00000010) == (inputsMap[camSCL-1] & 0b00000010)) {
                 // channels matched, unmap cam clock
                 currentPins[inputsMap[camSCL-1]] = btnUnmapped;
                 pinBoxes[inputsMap[camSCL-1]]->setCurrentIndex(btnUnmapped);
-                pinBoxesOldIndex[inputsMap[camSCL-1]] = btnUnmapped;
                 ui->statusBar->showMessage("Camera and Peripheral Data pins clashed! Please remap Camera Clock.", 10000);
             }
         }
@@ -1594,15 +1579,11 @@ void guiWindow::pinBoxes_activated(int index)
         for(uint8_t i = 0; i < foundList.length(); i++) {
             currentPins[foundList[i]] = btnUnmapped;
             pinBoxes[foundList[i]]->setCurrentIndex(btnUnmapped);
-            pinBoxesOldIndex[foundList[i]] = btnUnmapped;
         }
         // Then map the thing.
         currentPins[pin] = index;
         inputsMap[btnRequest] = pin;
     }
-    // because "->currentIndex" is already updated, we just update it at the end of activations
-    // to check that we aren't re-selecting the index for that box.
-    pinBoxesOldIndex[pin] = index;
 
     // update settings panel to reflect pins map changes
     if(inputsMap[rumblePin-1] >= 0) { ui->rumbleToggle->setEnabled(true), ui->rumbleFFToggle->setEnabled(true); } else { ui->rumbleToggle->setChecked(false), ui->rumbleToggle->setEnabled(false), ui->rumbleFFToggle->setChecked(false), ui->rumbleFFToggle->setEnabled(false); }
@@ -1750,7 +1731,6 @@ void guiWindow::on_presetsBox_currentIndexChanged(int index)
         if(!ui->customPinsEnabled->isChecked()) { ui->customPinsEnabled->setChecked(true); }
         for(uint8_t i = 0; i < 30; i++) {
             pinBoxes[i]->setCurrentIndex(btnUnmapped);
-            pinBoxesOldIndex[i] = btnUnmapped;
             currentPins[i] = btnUnmapped;
         }
         for(uint8_t i = 0; i < boardInputsCount-1; i++) {
@@ -1759,7 +1739,6 @@ void guiWindow::on_presetsBox_currentIndexChanged(int index)
             case rpipicow:
                 if(rpipicoPresets[index][i] > -1) {
                     pinBoxes[rpipicoPresets[index][i]]->setCurrentIndex(i+1);
-                    pinBoxesOldIndex[rpipicoPresets[index][i]] = i+1;
                     currentPins[rpipicoPresets[index][i]] = i+1;
                 }
                 inputsMap[i] = rpipicoPresets[index][i];
@@ -1767,7 +1746,6 @@ void guiWindow::on_presetsBox_currentIndexChanged(int index)
             case adafruitItsyRP2040:
                 if(adafruitItsyBitsyRP2040Presets[index][i] > -1) {
                     pinBoxes[adafruitItsyBitsyRP2040Presets[index][i]]->setCurrentIndex(i+1);
-                    pinBoxesOldIndex[adafruitItsyBitsyRP2040Presets[index][i]] = i+1;
                     currentPins[adafruitItsyBitsyRP2040Presets[index][i]] = i+1;
                 }
                 inputsMap[i] = adafruitItsyBitsyRP2040Presets[index][i];

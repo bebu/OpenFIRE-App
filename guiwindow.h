@@ -218,10 +218,10 @@ private:
     uint8_t tempWarning = 35;
     uint8_t tempShutoff = 42;
 
-    // because pinBoxes' "->currentIndex" gets updated AFTER calling its activation signal,
-    // we need to save its last index to properly compare and prevent duplicate changes,
-    // and then update it at the end of the activate signal.
-    int pinBoxesOldIndex[30];
+    // Indexed array map of the current physical layout of the board.
+    // Key = pin number, Value = pin function
+    // Values: -2 = N/A, -1 = reserved, 0 = available, unused
+    QMap<uint8_t, int8_t> currentPins;
 
     // Uses the same logic as pinBoxesOldIndex, since the irSensor and runMode comboboxes
     // are hooked to a single signal.
