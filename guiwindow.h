@@ -218,15 +218,11 @@ private:
     uint8_t tempWarning = 35;
     uint8_t tempShutoff = 42;
 
-    // Indexed array map of the current physical layout of the board.
+    // Indexed array map of the current physical layout of the board;
+    // Also doubles as combobox sanity check.
     // Key = pin number, Value = pin function
     // Values: -2 = N/A, -1 = reserved, 0 = available, unused
     QMap<uint8_t, int8_t> currentPins;
-
-    // Uses the same logic as pinBoxesOldIndex, since the irSensor and runMode comboboxes
-    // are hooked to a single signal.
-    uint8_t irSensOldIndex[4];
-    uint8_t runModeOldIndex[4];
 
     bool testMode = false;
 

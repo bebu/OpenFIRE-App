@@ -405,8 +405,8 @@ void guiWindow::SerialLoad()
                 rightOffset[i]->setText(buffer[3]), profilesTable[i].rightOffset = buffer[3].toInt(), profilesTable_orig[i].rightOffset = profilesTable[i].rightOffset;
                 TLled[i]->setText(buffer[4]), profilesTable[i].TLled = buffer[4].toFloat(), profilesTable_orig[i].TLled = profilesTable[i].TLled;
                 TRled[i]->setText(buffer[5]), profilesTable[i].TRled = buffer[5].toFloat(), profilesTable_orig[i].TRled = profilesTable[i].TRled;
-                profilesTable[i].irSensitivity = buffer[6].toInt(), profilesTable_orig[i].irSensitivity = profilesTable[i].irSensitivity, irSens[i]->setCurrentIndex(profilesTable[i].irSensitivity), irSensOldIndex[i] = profilesTable[i].irSensitivity;
-                profilesTable[i].runMode = buffer[7].toInt(), profilesTable_orig[i].runMode = profilesTable[i].runMode, runMode[i]->setCurrentIndex(profilesTable[i].runMode), runModeOldIndex[i] = profilesTable[i].runMode;
+                profilesTable[i].irSensitivity = buffer[6].toInt(), profilesTable_orig[i].irSensitivity = profilesTable[i].irSensitivity, irSens[i]->setCurrentIndex(profilesTable[i].irSensitivity);
+                profilesTable[i].runMode = buffer[7].toInt(), profilesTable_orig[i].runMode = profilesTable[i].runMode, runMode[i]->setCurrentIndex(profilesTable[i].runMode);
                 layoutMode[i]->setCurrentIndex(buffer[8].toInt()), profilesTable[i].layoutType = buffer[8].toInt(), profilesTable_orig[i].layoutType = profilesTable[i].layoutType;
                 color[i]->setStyleSheet(QString("background-color: #%1").arg(buffer[9].toLong(), 6, 16, QLatin1Char('0'))), profilesTable[i].color = buffer[9].toLong(), profilesTable_orig[i].color = profilesTable[i].color;
                 selectedProfile[i]->setText(buffer[10]), profilesTable[i].profName = buffer[10], profilesTable_orig[i].profName = profilesTable[i].profName;
@@ -1606,10 +1606,8 @@ void guiWindow::irBoxes_activated(int index)
         }
     }
 
-    if(index != irSensOldIndex[slot]) {
-        profilesTable[slot].irSensitivity = index;
-    }
-    irSensOldIndex[slot] = index;
+    profilesTable[slot].irSensitivity = index;
+
     DiffUpdate();
 }
 
@@ -1626,10 +1624,8 @@ void guiWindow::runModeBoxes_activated(int index)
         }
     }
 
-    if(index != runModeOldIndex[slot]) {
-        profilesTable[slot].runMode = index;
-    }
-    runModeOldIndex[slot] = index;
+    profilesTable[slot].runMode = index;
+
     DiffUpdate();
 }
 
