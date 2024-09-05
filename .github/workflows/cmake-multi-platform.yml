@@ -35,7 +35,7 @@ jobs:
             c_compiler: cl
 
     steps:
-    - uses: actions/checkout@v4.1.1
+    - uses: actions/checkout@v4
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -85,7 +85,7 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4.3.1
+      uses: actions/upload-artifact@v4
       with:
         # Artifact name
         name: OpenFIREapp-${{ matrix.pretty }} # optional, default is artifact
@@ -93,7 +93,7 @@ jobs:
         path: ${{ matrix.file }}
 
     - name: Download a Build Artifact
-      uses: actions/download-artifact@v4.1.2
+      uses: actions/download-artifact@v4
       with:
         # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
         name: OpenFIREapp-${{ matrix.pretty }} # optional
